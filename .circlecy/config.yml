@@ -25,4 +25,4 @@ workflows:
   build_and_tests:
     jobs:
       - build
-      - unit-tests
+      - tests
