@@ -12,7 +12,6 @@ jobs:
       - checkout
       - run: mvn clean install
       - run: bash <(curl -s https://codecov.io/bash)
-
   tests:
     <<: *defaults
     steps:
