@@ -12,8 +12,8 @@ package com.uniovi.categories;
 /**
  * Instance of UnitTest.java
  * 
- * @author 
- * @version 
+ * @author
+ * @version
  */
 public interface UnitTest {
 

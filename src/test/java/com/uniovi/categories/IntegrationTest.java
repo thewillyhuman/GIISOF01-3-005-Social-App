@@ -12,8 +12,8 @@ package com.uniovi.categories;
 /**
  * Instance of IntegrationTest.java
  * 
- * @author 
- * @version 
+ * @author
+ * @version
  */
 public interface IntegrationTest {
 

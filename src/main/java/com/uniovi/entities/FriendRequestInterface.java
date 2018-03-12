@@ -7,14 +7,16 @@
  * See /LICENSE for license information.
  * 
  */
-package com.uniovi.categories;
+package com.uniovi.entities;
 
 /**
- * Instance of SmookeTest.java
+ * Instance of FriendRequestInterface.java
  * 
- * @author
- * @version
+ * @author 
+ * @version 
  */
-public interface SmookeTest {
+public interface FriendRequestInterface {
+	
+	public void accept( UserInterface user );
 
 }
