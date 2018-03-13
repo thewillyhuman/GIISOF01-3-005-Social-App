@@ -1,15 +1,7 @@
-/*
- * This source file is part of the SocialApp open source project.
- *
- * Copyright (c) 2018 willy and the SocialApp project authors.
- * Licensed under GNU General Public License v3.0.
- *
- * See /LICENSE for license information.
- * 
- */
 package com.uniovi.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.entities.User;
@@ -24,26 +16,30 @@ import com.uniovi.repositories.UsersRepository;
 @Service
 public class UsersService {
 
-    @Autowired
-    UsersRepository repository;
+	@Autowired
+	private UsersRepository repository;
 
-    public Iterable<User> getUsers() {
-	return repository.findAll();
-    }
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User getUser(Long id) {
-	return repository.findOne(id);
-    }
+	public Iterable<User> getUsers() {
+		return repository.findAll();
+	}
 
-    public User getUserByEmail(String email) {
-	return repository.findByEmail(email);
-    }
+	public User getUser(Long id) {
+		return repository.findOne(id);
+	}
 
-    public void saveUser(User user) {
-	repository.save(user);
-    }
+	public User getUserByEmail(String email) {
+		return repository.findByEmail(email);
+	}
 
-    public void removeUser(User user) {
-	repository.delete(user);
-    }
+	public void saveUser(User user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		repository.save(user);
+	}
+
+	public void removeUser(User user) {
+		repository.delete(user);
+	}
 }
