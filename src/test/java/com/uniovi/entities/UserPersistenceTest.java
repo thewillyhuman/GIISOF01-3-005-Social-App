@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -36,7 +37,10 @@ import com.uniovi.services.UsersService;
 public class UserPersistenceTest {
     
     @Autowired
-    UsersService service;
+    UsersService usersService;
+    
+    //@Autowired
+    //FriendRequestService requestService;
     
     private User u1, u2, u3;
 
@@ -65,9 +69,11 @@ public class UserPersistenceTest {
 	
 	u1.getFriends().add(u2);
 	
-	service.saveUser(u1);
-	service.saveUser(u2);
-	service.saveUser(u3);
+	u2.getRequests().add(u3);
+	
+	usersService.saveUser(u1);
+	usersService.saveUser(u2);
+	usersService.saveUser(u3);
     }
 
     /**
@@ -75,44 +81,63 @@ public class UserPersistenceTest {
      */
     @After
     public void tearDown() throws Exception {
-	service.removeUser(u1);
-	service.removeUser(u2);
-	service.removeUser(u3);
+	usersService.removeUser(u1);
+	usersService.removeUser(u2);
+	usersService.removeUser(u3);
     }
 
     @Test
     public void getUserNameTest() {
-	User result = service.getUserByEmail("pepe@email.com");
+	User result = usersService.getUserByEmail("pepe@email.com");
 	assertEquals("Pepe", result.getName());
     }
     
     @Test
     public void getUserPasswordTest() {
-	User result = service.getUserByEmail("pepe@email.com");
+	User result = usersService.getUserByEmail("pepe@email.com");
 	assertEquals("123456", result.getPassword());
     }
     
     @Test
     public void getFriendsTest() {
-	User result = service.getUserByEmail("pepe@email.com");
+	User result = usersService.getUserByEmail("pepe@email.com");
 	assertEquals("María", result.getFriends().iterator().next().getName());
     }
     
     @Test
+    public void getFriendRequestsTest() {
+	User result = usersService.getUserByEmail("maria@email.com");
+	assertEquals(1, result.getRequests().size());
+    }
+    
+    @Test @Ignore
+    public void acceptFriendRequestsTest() {
+	User result = usersService.getUserByEmail("maria@email.com");
+	//result.getFriendRequests().forEach((request)->request.accept(result));
+	assertEquals(1, result.getRequests().size());
+	result.acceptRequestFrom(u3);
+	
+	usersService.saveUser(result);
+	
+	result = usersService.getUserByEmail("maria@email.com");
+	assertEquals(1, result.getFriends().size());
+    }
+    
+    @Test
     public void modifyUserNameTest() {
-	User result = service.getUserByEmail("maria@email.com");
+	User result = usersService.getUserByEmail("maria@email.com");
 	result.setName("Eustaquia");
-	service.saveUser(result);
-	result = service.getUserByEmail("maria@email.com");
+	usersService.saveUser(result);
+	result = usersService.getUserByEmail("maria@email.com");
 	assertEquals("Eustaquia", result.getName());
     }
     
     @Test
     public void modifyEmailTest() {
-	User result = service.getUserByEmail("maria@email.com");
+	User result = usersService.getUserByEmail("maria@email.com");
 	result.setEmail("eustaquia@mail.com");
-	service.saveUser(result);
-	result = service.getUserByEmail("eustaquia@mail.com");
+	usersService.saveUser(result);
+	result = usersService.getUserByEmail("eustaquia@mail.com");
 	assertEquals("eustaquia@mail.com", result.getEmail());
     }
 

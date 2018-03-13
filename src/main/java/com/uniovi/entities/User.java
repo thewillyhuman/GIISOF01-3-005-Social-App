@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 @Entity
 public class User {
@@ -30,9 +31,15 @@ public class User {
     private Set<User> friends = new HashSet<User>();
 
     // List of friend requests.
-    @OneToMany(mappedBy = "id",
-	    cascade = { CascadeType.ALL })
-    private Set<FriendRequest> friendRequests = new HashSet<FriendRequest>();
+    /*
+     * @OneToMany(mappedBy = "from", cascade = { CascadeType.ALL }, fetch =
+     * FetchType.EAGER) private Set<FriendRequest> requests;
+     */
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @JoinTable(name = "requests",
+	    joinColumns = @JoinColumn(name = "requester_id"),
+	    inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> requests = new HashSet<User>();
 
     public User(String name, String email) {
 	setName(name);
@@ -112,11 +119,25 @@ public class User {
 	this.friends = friends;
     }
 
-    public Set<FriendRequest> getFriendRequests() {
-	return friendRequests;
+    public Set<User> getRequests() {
+	if (requests == null)
+	    requests = new HashSet<User>();
+
+	return requests;
     }
 
-    public void setFriendRequests(Set<FriendRequest> friendRequests) {
-	this.friendRequests = friendRequests;
+    public void setRequests(Set<User> friendRequests) {
+	this.requests = friendRequests;
+    }
+    
+    @Transactional
+    public void acceptRequestFrom(User user) {
+	if(requests.contains(user)) {
+	    this.friends.add(user);
+	    user.getFriends().add(this);
+	    this.requests.remove(user);
+	} else {
+	    System.err.println("There's no request from that user");
+	}
     }
 }

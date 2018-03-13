@@ -77,10 +77,8 @@ import com.uniovi.categories.UnitTest;
 	}
 
 	@Test public void friendsRequestAcceptTest() {
-		FriendRequest fr1 = new FriendRequest( (User) u2 );
-		u1.getFriendRequests().add( new FriendRequest( (User) u2 ) );
-		fr1.accept( (User) u1 );
-
+		u1.getRequests().add( (User) u2 );
+		u1.acceptRequestFrom((User) u2);
 		assertEquals( 1, u1.getFriends().size() );
 	}
 
