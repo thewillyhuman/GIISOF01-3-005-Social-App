@@ -16,13 +16,13 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run: mvn test -Dgroups="categories.UnitTest"
+      - run: mvn test -Dgroups="com.uniovi.categories.UnitTest"
 
   integration-tests:
     <<: *defaults
     steps:
       - checkout
-      - run: mvn test -Dgroups="categories.IntegrationTest"
+      - run: mvn test -Dgroups="com.uniovi.categories.IntegrationTest"
 workflows:
   version: 2
   build_and_tests:
