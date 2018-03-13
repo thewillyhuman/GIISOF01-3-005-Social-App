@@ -16,8 +16,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.uniovi.categories.UnitTest;
-import com.uniovi.entities.impl.FriendRequest;
-import com.uniovi.entities.impl.User;
 
 /**
  * Instance of UserTest.java
@@ -27,7 +25,7 @@ import com.uniovi.entities.impl.User;
  */
 @Category(UnitTest.class) public class UserTest {
 
-	private UserInterface u1, u2;
+	private User u1, u2;
 
 	/**
 	 * @throws java.lang.Exception
@@ -79,9 +77,9 @@ import com.uniovi.entities.impl.User;
 	}
 
 	@Test public void friendsRequestAcceptTest() {
-		FriendRequest fr1 = new FriendRequest( u2 );
-		u1.getFriendRequests().add( new FriendRequest( u2 ) );
-		fr1.accept( u1 );
+		FriendRequest fr1 = new FriendRequest( (User) u2 );
+		u1.getFriendRequests().add( new FriendRequest( (User) u2 ) );
+		fr1.accept( (User) u1 );
 
 		assertEquals( 1, u1.getFriends().size() );
 	}

@@ -10,10 +10,9 @@
 package com.uniovi.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.uniovi.entities.UserInterface;
+import com.uniovi.entities.User;
 import com.uniovi.repositories.UsersRepository;
 
 /**
@@ -28,27 +27,23 @@ public class UsersService {
     @Autowired
     UsersRepository repository;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public Iterable<UserInterface> getUsers() {
+    public Iterable<User> getUsers() {
 	return repository.findAll();
     }
 
-    public UserInterface getUser(Long id) {
+    public User getUser(Long id) {
 	return repository.findOne(id);
     }
 
-    public UserInterface getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
 	return repository.findByEmail(email);
     }
 
-    public void addUser(UserInterface user) {
-	user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    public void saveUser(User user) {
 	repository.save(user);
     }
 
-    public void removeUser(UserInterface user) {
+    public void removeUser(User user) {
 	repository.delete(user);
     }
 }
