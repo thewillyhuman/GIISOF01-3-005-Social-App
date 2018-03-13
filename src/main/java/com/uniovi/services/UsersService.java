@@ -12,38 +12,38 @@ package com.uniovi.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.uniovi.entities.UserInterface;
+import com.uniovi.entities.User;
 import com.uniovi.repositories.UsersRepository;
 
 /**
  * Instance of UsersService.java
  * 
- * @author 
- * @version 
+ * @author
+ * @version
  */
 @Service
 public class UsersService {
-	
-	@Autowired
-	UsersRepository repository;
-	
-	public Iterable<UserInterface> getUsers() {
-		return repository.findAll();
-	}
-	
-	public UserInterface getUser(Long id) {
-		return repository.findOne( id );
-	}
-	
-	public UserInterface getUserByEmail( String email ) {
-		return repository.findByEmail( email );
-	}
-	
-	public void addUser( UserInterface user ) {
-		repository.save( user );
-	}
-	
-	public void removeUser( UserInterface user ) {
-		repository.delete( user );
-	}
+
+    @Autowired
+    UsersRepository repository;
+
+    public Iterable<User> getUsers() {
+	return repository.findAll();
+    }
+
+    public User getUser(Long id) {
+	return repository.findOne(id);
+    }
+
+    public User getUserByEmail(String email) {
+	return repository.findByEmail(email);
+    }
+
+    public void saveUser(User user) {
+	repository.save(user);
+    }
+
+    public void removeUser(User user) {
+	repository.delete(user);
+    }
 }

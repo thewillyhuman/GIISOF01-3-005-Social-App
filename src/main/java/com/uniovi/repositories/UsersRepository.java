@@ -11,8 +11,7 @@ package com.uniovi.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.uniovi.entities.UserInterface;
-//import com.uniovi.entities.impl.User;
+import com.uniovi.entities.User;
 
 /**
  * Instance of UsersRepository.java
@@ -20,7 +19,7 @@ import com.uniovi.entities.UserInterface;
  * @author 
  * @version 
  */
-public interface UsersRepository extends CrudRepository<UserInterface, Long> {
+public interface UsersRepository extends CrudRepository<User, Long> {
 	
 	/**
 	 * Finds a given user by its email.
@@ -28,6 +27,6 @@ public interface UsersRepository extends CrudRepository<UserInterface, Long> {
 	 * @param email of the user you want to find.
 	 * @return the user if found. Null otherwise.
 	 */
-	UserInterface findByEmail(String email);
+	User findByEmail(String email);
 
 }
