@@ -28,20 +28,20 @@ import com.uniovi.services.UsersService;
 /**
  * Instance of UserPersistenceTest.java
  * 
- * @author 
- * @version 
+ * @author
+ * @version
  */
 @SpringBootTest(classes = { SocialAppApplication.class })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Category(IntegrationTest.class)
 public class UserPersistenceTest {
-    
+
     @Autowired
     UsersService usersService;
-    
-    //@Autowired
-    //FriendRequestService requestService;
-    
+
+    // @Autowired
+    // FriendRequestService requestService;
+
     private User u1, u2, u3;
 
     /**
@@ -54,23 +54,23 @@ public class UserPersistenceTest {
 	u1.setEmail("pepe@email.com");
 	u1.setPassword("123456");
 	u1.setPasswordConfirm("123456");
-	
+
 	u2 = new User();
 	u2.setName("María");
 	u2.setEmail("maria@email.com");
 	u2.setPassword("123456");
 	u2.setPasswordConfirm("123456");
-	
+
 	u3 = new User();
 	u3.setName("Laura");
 	u3.setEmail("laura@email.com");
 	u3.setPassword("123456");
 	u3.setPasswordConfirm("123456");
-	
+
 	u1.getFriends().add(u2);
-	
+
 	u2.getRequests().add(u3);
-	
+
 	usersService.saveUser(u1);
 	usersService.saveUser(u2);
 	usersService.saveUser(u3);
@@ -91,38 +91,68 @@ public class UserPersistenceTest {
 	User result = usersService.getUserByEmail("pepe@email.com");
 	assertEquals("Pepe", result.getName());
     }
-    
+
     @Test
     public void getUserPasswordTest() {
 	User result = usersService.getUserByEmail("pepe@email.com");
 	assertEquals("123456", result.getPassword());
     }
-    
+
     @Test
     public void getFriendsTest() {
 	User result = usersService.getUserByEmail("pepe@email.com");
 	assertEquals("María", result.getFriends().iterator().next().getName());
     }
-    
+
     @Test
     public void getFriendRequestsTest() {
 	User result = usersService.getUserByEmail("maria@email.com");
 	assertEquals(1, result.getRequests().size());
     }
-    
-    @Test @Ignore
+
+    @Test
     public void acceptFriendRequestsTest() {
+
+	// First we load Maria in the object graph. Who has a friend request from Laura.
 	User result = usersService.getUserByEmail("maria@email.com");
-	//result.getFriendRequests().forEach((request)->request.accept(result));
+	// We check that the friend request exists.
 	assertEquals(1, result.getRequests().size());
+
+	// We print the frind requests. Just to debug.
+	for (User u : result.getRequests())
+	    System.out.println("Request from user: " + u.getEmail());
+
+	// We check that Maria has no friends.
+	assertEquals(0, result.getFriends().size());
+	
+	System.out.println(u3.getEmail());
+
+	// We accept the request from Laura
 	result.acceptRequestFrom(u3);
-	
+
+	// Check that the request was successfully accepted.
+	assertEquals(1, result.getFriends().size());
+
+	// We save the status of Maria.
 	usersService.saveUser(result);
-	
+
+	// Check again that the request was successfully accepted and no changes in
+	// local graph after persistence operation.
+	assertEquals(1, result.getFriends().size());
+
+	// We update the Maria graph from the service.
 	result = usersService.getUserByEmail("maria@email.com");
+
+	// Check that now Maria has 1 friend.
+	assertEquals(1, result.getFriends().size());
+
+	// We load Laura in memory.
+	result = usersService.getUserByEmail("laura@email.com");
+
+	// Check also that now Laura has 1 friend.
 	assertEquals(1, result.getFriends().size());
     }
-    
+
     @Test
     public void modifyUserNameTest() {
 	User result = usersService.getUserByEmail("maria@email.com");
@@ -131,7 +161,7 @@ public class UserPersistenceTest {
 	result = usersService.getUserByEmail("maria@email.com");
 	assertEquals("Eustaquia", result.getName());
     }
-    
+
     @Test
     public void modifyEmailTest() {
 	User result = usersService.getUserByEmail("maria@email.com");

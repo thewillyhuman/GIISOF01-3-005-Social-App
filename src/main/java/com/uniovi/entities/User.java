@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 public class User {
@@ -25,9 +26,7 @@ public class User {
 
     // List of friends.
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    @JoinTable(name = "friends",
-    	joinColumns = @JoinColumn(name = "friend_id"),
-    	inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> friends = new HashSet<User>();
 
     // List of friend requests.
@@ -36,9 +35,7 @@ public class User {
      * FetchType.EAGER) private Set<FriendRequest> requests;
      */
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    @JoinTable(name = "requests",
-	    joinColumns = @JoinColumn(name = "requester_id"),
-	    inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> requests = new HashSet<User>();
 
     public User(String name, String email) {
@@ -129,15 +126,41 @@ public class User {
     public void setRequests(Set<User> friendRequests) {
 	this.requests = friendRequests;
     }
-    
-    @Transactional
+   
     public void acceptRequestFrom(User user) {
-	if(requests.contains(user)) {
-	    this.friends.add(user);
-	    user.getFriends().add(this);
-	    this.requests.remove(user);
+	if (this.getRequests().contains(user)) {
+	    if (this.friends.add(user))
+		System.err.println("Inserted in friends");
+	    else
+		System.err.println("Not inserted in friends");
+
+	    if (user.getFriends().add(this))
+		System.err.println("Inserted in requester friends");
+	    else
+		System.err.println("Not inserted in requester friends");
+
+	    if (this.requests.remove(user))
+		System.err.println("Removed from requests");
+	    else
+		System.err.println("Not removed from requests");
+	    
 	} else {
 	    System.err.println("There's no request from that user");
 	}
+    }
+
+    @Override
+    public boolean equals(Object other) {
+	if (other == null)
+	    return false;
+	if (other == this)
+	    return true;
+	if (!(other instanceof User))
+	    return false;
+	User otherUser = (User) other;
+	if(this.email==otherUser.getEmail())
+	    return true;
+	else
+	    return false;
     }
 }
