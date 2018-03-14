@@ -12,14 +12,23 @@ jobs:
       - checkout
       - run: mvn clean install
       - run: bash <(curl -s https://codecov.io/bash)
-  tests:
+  unit-tests:
     <<: *defaults
     steps:
       - checkout
-      - run: mvn test
+      - run: mvn test -Dgroups="com.uniovi.categories.UnitTest"
+
+  integration-tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: mvn test -Dgroups="com.uniovi.categories.IntegrationTest"
 workflows:
   version: 2
   build_and_tests:
     jobs:
       - build
-      - tests
+      - unit-tests
+      - integration-tests:
+          requires:
+            - build
