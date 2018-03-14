@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run: wget https://github.com/thewilly/UDocs/raw/master/hsqldb-2.4.0.zip
       - run: unzip hsqldb-2.4.0.zip;
-      - run: sh hsqldb-2.4.0/hsqldb/bin/runServer.sh
+      - run: cd hsqldb-2.4.0/hsqldb/bin/; sh runServer.sh
       - run: mvn clean install
       - run: bash <(curl -s https://codecov.io/bash)
   unit-tests:
