@@ -13,7 +13,6 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -69,7 +68,7 @@ public class UserPersistenceTest {
 
 	u1.getFriends().add(u2);
 
-	u2.getRequests().add(u3);
+	//u2.getRequests().add(u3);
 
 	usersService.saveUser(u1);
 	usersService.saveUser(u2);
@@ -81,9 +80,26 @@ public class UserPersistenceTest {
      */
     @After
     public void tearDown() throws Exception {
-	usersService.removeUser(u1);
-	usersService.removeUser(u2);
-	usersService.removeUser(u3);
+	for(User u : usersService.getUsers())
+	    usersService.removeUser(u);
+    }
+    
+    @Test
+    public void addFriendTest() {
+	// Get the user Pepe
+	User result = usersService.getUserByEmail("pepe@email.com");
+	
+	// Ads Maria as a friend of Pepe 
+	result.getFriends().add(u3);
+	
+	// Saving paco
+	usersService.saveUser(result);
+	
+	// Geting paco from db
+	result = usersService.getUserByEmail("pepe@email.com");
+	
+	// Checking maria is in friends of paco
+	assertEquals(2, result.getFriends().size());
     }
 
     @Test
@@ -106,51 +122,61 @@ public class UserPersistenceTest {
 
     @Test
     public void getFriendRequestsTest() {
-	User result = usersService.getUserByEmail("maria@email.com");
-	assertEquals(1, result.getRequests().size());
+	User maria = usersService.getUserByEmail("maria@email.com");
+	assertEquals(0, maria.getRequests().size());
+	maria.getRequests().add(usersService.getUserByEmail("laura@email.com"));
+	usersService.saveUser(maria);
+	assertEquals(1, maria.getRequests().size());
+	maria = usersService.getUserByEmail("maria@email.com");
+	assertEquals(1, maria.getRequests().size());
     }
 
     @Test
     public void acceptFriendRequestsTest() {
 
 	// First we load Maria in the object graph. Who has a friend request from Laura.
-	User result = usersService.getUserByEmail("maria@email.com");
+	User maria = usersService.getUserByEmail("maria@email.com");
+	User laura = usersService.getUserByEmail("laura@email.com");
+	
+	// Adding the request from laura
+	maria.getRequests().add(laura);
+	
 	// We check that the friend request exists.
-	assertEquals(1, result.getRequests().size());
+	assertEquals(1, maria.getRequests().size());
 
 	// We print the frind requests. Just to debug.
-	for (User u : result.getRequests())
+	for (User u : maria.getRequests())
 	    System.out.println("Request from user: " + u.getEmail());
 
 	// We check that Maria has no friends.
-	assertEquals(0, result.getFriends().size());
+	assertEquals(0, maria.getFriends().size());
 	
 	System.out.println(u3.getEmail());
 
 	// We accept the request from Laura
-	result.acceptRequestFrom(u3);
+	maria.acceptRequestFrom(laura);
 
 	// Check that the request was successfully accepted.
-	assertEquals(1, result.getFriends().size());
+	assertEquals(1, maria.getFriends().size());
 
 	// We save the status of Maria.
-	usersService.saveUser(result);
+	usersService.saveUser(maria);
 
 	// Check again that the request was successfully accepted and no changes in
 	// local graph after persistence operation.
-	assertEquals(1, result.getFriends().size());
+	assertEquals(1, maria.getFriends().size());
 
 	// We update the Maria graph from the service.
-	result = usersService.getUserByEmail("maria@email.com");
+	maria = usersService.getUserByEmail("maria@email.com");
 
 	// Check that now Maria has 1 friend.
-	assertEquals(1, result.getFriends().size());
+	assertEquals(1, maria.getFriends().size());
 
 	// We load Laura in memory.
-	result = usersService.getUserByEmail("laura@email.com");
+	maria = usersService.getUserByEmail("laura@email.com");
 
 	// Check also that now Laura has 1 friend.
-	assertEquals(1, result.getFriends().size());
+	assertEquals(1, maria.getFriends().size());
     }
 
     @Test

@@ -26,7 +26,9 @@ public class User {
 
     // List of friends.
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "friends",
+    joinColumns = @JoinColumn(name = "friend_id"),
+    inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> friends = new HashSet<User>();
 
     // List of friend requests.
@@ -35,7 +37,9 @@ public class User {
      * FetchType.EAGER) private Set<FriendRequest> requests;
      */
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    @JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "requests",
+    joinColumns = @JoinColumn(name = "requester_id"),
+    inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> requests = new HashSet<User>();
 
     public User(String name, String email) {
@@ -46,6 +50,10 @@ public class User {
 
     public User() {
 
+    }
+    
+    public long getId() {
+	return this.id;
     }
 
     /**
