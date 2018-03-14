@@ -35,7 +35,7 @@ import com.uniovi.services.UsersService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Category(IntegrationTest.class)
 public class UserPersistenceTest {
-
+  
 	@Autowired
 	UsersService usersService;
 
@@ -194,6 +194,5 @@ public class UserPersistenceTest {
 		usersService.saveUser(result);
 		result = usersService.getUserByEmail("eustaquia@mail.com");
 		assertEquals("eustaquia@mail.com", result.getEmail());
-	}
-
+  }
 }

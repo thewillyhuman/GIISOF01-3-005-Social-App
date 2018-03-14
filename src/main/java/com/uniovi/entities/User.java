@@ -14,9 +14,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Entity
 public class User {
-
 	@Id
 	@GeneratedValue
 	private long id;
@@ -134,27 +135,22 @@ public class User {
 		this.requests = friendRequests;
 	}
 
-	public void acceptRequestFrom(User user) {
-		if (this.getRequests().contains(user)) {
-			if (this.friends.add(user))
-				System.err.println("Inserted in friends");
-			else
-				System.err.println("Not inserted in friends");
+	@Transactional
+  public void acceptRequestFrom(User user) {
+	  if (this.getRequests().contains(user)) {
+	    // Add the relation to one side.
+	    this.friends.add(user);
+	    
+	    // Add the relation to another side.
+	    user.getFriends().add(this);
+	    
+	    // Remove the user request
+	    this.requests.remove(user);
 
-			if (user.getFriends().add(this))
-				System.err.println("Inserted in requester friends");
-			else
-				System.err.println("Not inserted in requester friends");
-
-			if (this.requests.remove(user))
-				System.err.println("Removed from requests");
-			else
-				System.err.println("Not removed from requests");
-
-		} else {
-			System.err.println("There's no request from that user");
-		}
-	}
+	  } else {
+	    System.err.println("There's no request from that user");
+	  }
+  }
 
 	@Override
 	public boolean equals(Object other) {
