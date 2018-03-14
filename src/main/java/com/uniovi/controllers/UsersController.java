@@ -99,4 +99,17 @@ public class UsersController {
 		return "home";
 	}
 
+	@RequestMapping("/user/peticiones")
+	public String getPeticiones(Model model, Pageable pageable) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+
+		Page<User> users = new PageImpl<User>(new LinkedList<User>(usersService.getPeticiones(activeUser)));
+
+		model.addAttribute("peticiones", users.getContent());
+		model.addAttribute("page", users);
+		return "user/peticiones";
+	}
+
 }

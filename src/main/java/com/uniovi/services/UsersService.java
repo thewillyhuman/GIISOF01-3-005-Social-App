@@ -2,9 +2,11 @@ package com.uniovi.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,6 +59,10 @@ public class UsersService {
 		String search = "%" + searchText + "%";
 		marks = repository.searchUsersByEmailAndName(search);
 		return marks;
+	}
+
+	public Set<User> getPeticiones(User user) {
+		return user.getRequests();
 	}
 
 }

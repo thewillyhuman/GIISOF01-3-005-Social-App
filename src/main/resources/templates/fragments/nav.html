@@ -12,6 +12,7 @@
 			<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">
 				<li><a href="/">Home</a></li>
 				<li><a href="/user/list">Ver Usuarios</a></li>
+				<li><a href="/user/peticiones">Ver Peticiones</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li sec:authorize="!isAuthenticated()"><a href="/signup"
