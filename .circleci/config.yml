@@ -27,6 +27,11 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run: wget https://github.com/thewilly/UDocs/raw/master/hsqldb-2.4.0.zip
+      - run: unzip hsqldb-2.4.0.zip;
+      - run:
+          command: cd hsqldb-2.4.0/hsqldb/bin/; sh runServer.sh
+          background: true
       - run: mvn test -Dgroups="com.uniovi.categories.IntegrationTest"
 workflows:
   version: 2
