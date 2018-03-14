@@ -94,7 +94,18 @@ public class UsersController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
-		activeUser.getRequests().add(friend);
+		friend.getRequests().add(activeUser);
+		usersService.updateUser(activeUser);
+		return "home";
+	}
+
+	@RequestMapping("/user/acceptFriendRequest/{id}")
+	public String acceptFriendRequest(Model model, @PathVariable Long id) {
+		User friend = usersService.getUser(id);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+		activeUser.acceptRequestFrom(friend);
 		usersService.saveUser(activeUser);
 		return "home";
 	}
@@ -105,11 +116,24 @@ public class UsersController {
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
 
-		Page<User> users = new PageImpl<User>(new LinkedList<User>(usersService.getPeticiones(activeUser)));
+		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getRequests()));
 
 		model.addAttribute("peticiones", users.getContent());
 		model.addAttribute("page", users);
 		return "user/peticiones";
+	}
+
+	@RequestMapping("/user/amigos")
+	public String getAmigos(Model model, Pageable pageable) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+
+		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getFriends()));
+
+		model.addAttribute("amigos", users.getContent());
+		model.addAttribute("page", users);
+		return "user/amigos";
 	}
 
 }
