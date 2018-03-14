@@ -161,22 +161,19 @@ public class UserPersistenceTest {
 
 	// We save the status of Maria.
 	usersService.saveUser(maria);
+	//usersService.saveUser(laura);
 
 	// Check again that the request was successfully accepted and no changes in
 	// local graph after persistence operation.
 	assertEquals(1, maria.getFriends().size());
 
-	// We update the Maria graph from the service.
+	// We update the Maria and laura graph from the service.
 	maria = usersService.getUserByEmail("maria@email.com");
+	laura = usersService.getUserByEmail("laura@email.com");
 
-	// Check that now Maria has 1 friend.
+	// Check that now Maria and laura has both 1 friend.
 	assertEquals(1, maria.getFriends().size());
-
-	// We load Laura in memory.
-	maria = usersService.getUserByEmail("laura@email.com");
-
-	// Check also that now Laura has 1 friend.
-	assertEquals(1, maria.getFriends().size());
+	assertEquals(1, laura.getFriends().size());
     }
 
     @Test
