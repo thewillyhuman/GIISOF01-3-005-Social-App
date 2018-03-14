@@ -35,6 +35,8 @@
 					<td th:text="${user.id}">1</td>
 					<td th:text="${user.name}">Usuario 1</td>
 					<td th:text="${user.email}">ejemplo@ejemplo.com</td>
+					<td><a th:href="${'/user/addFriendRequest/' + user.id }"
+						th:text="#{Button.add}"></a></td>
 				</tr>
 			</tbody>
 		</table>
