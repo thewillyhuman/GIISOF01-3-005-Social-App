@@ -8,18 +8,9 @@
 
 <body>
 
-	<form class="navbar-form" action="/user/list">
-		<div class="form-group">
-			<input name="searchText" type="text" class="form-control" size="50"
-				placeholder="Buscar por nombre o email del alumno" />
-		</div>
-		<button type="submit" class="btn btn-default">Buscar</button>
-	</form>
-
-
 	<div class="table-responsive">
-		<table class="table table-hover" th:fragment="tableUsers"
-			id="tableUsers">
+		<table class="table table-hover" th:fragment="tableAmigos"
+			id="tableAmigos">
 			<thead>
 				<tr>
 					<th class="col-md-1">Id</th>
@@ -31,12 +22,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="user : ${userList}">
+				<tr th:each="user : ${amigos}">
 					<td th:text="${user.id}">1</td>
 					<td th:text="${user.name}">Usuario 1</td>
 					<td th:text="${user.email}">ejemplo@ejemplo.com</td>
-					<td><a th:href="${'/user/addFriendRequest/' + user.id }"
-						th:text="#{Button.add}"></a></td>
 				</tr>
 			</tbody>
 		</table>
