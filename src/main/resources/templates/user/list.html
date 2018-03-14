@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="fragments/head" />
+
+<nav th:replace="fragments/nav" />
+
+
+<body>
+
+	<form class="navbar-form" action="/user/list">
+		<div class="form-group">
+			<input name="searchText" type="text" class="form-control" size="50"
+				placeholder="Buscar por nombre o email del alumno" />
+		</div>
+		<button type="submit" class="btn btn-default">Buscar</button>
+	</form>
+
+
+	<div class="table-responsive">
+		<table class="table table-hover" th:fragment="tableUsers"
+			id="tableUsers">
+			<thead>
+				<tr>
+					<th class="col-md-1">Id</th>
+					<th>Nombre</th>
+					<th>Email</th>
+					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : ${userList}">
+					<td th:text="${user.id}">1</td>
+					<td th:text="${user.name}">Usuario 1</td>
+					<td th:text="${user.email}">ejemplo@ejemplo.com</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<footer th:replace="fragments/pagination" />
+
+	<footer th:replace="fragments/footer" />
+
+</body>
+</html>

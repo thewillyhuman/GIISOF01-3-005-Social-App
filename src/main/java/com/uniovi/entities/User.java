@@ -45,6 +45,10 @@ public class User {
 
 	}
 
+	public long getId() {
+		return id;
+	}
+
 	/**
 	 * @return the name
 	 */

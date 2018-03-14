@@ -9,6 +9,10 @@
 			</button>
 		</div>
 		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">
+				<li><a href="/">Home</a></li>
+				<li><a href="/user/list">Ver Usuarios</a></li>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li sec:authorize="!isAuthenticated()"><a href="/signup"
 					th:text="#{signup.message}"> <span
