@@ -15,7 +15,7 @@
 				<label class="control-label col-sm-2" for="email" th:text="#{login.mail}" ></label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="email"
-						placeholder="99999999Y" required="true" /> <span
+						th:placeholder="#{example.mail}" required="true" /> <span
 						class="text-danger" th:if="${#fields.hasErrors('email')}"
 						th:errors="*{email}" />
 				</div>
@@ -24,7 +24,7 @@
 				<label class="control-label col-sm-2" for="name" th:text="#{signup.name}" ></label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="name"
-						placeholder="Ejemplo: Juan" required="true" /> <span
+						th:placeholder="#{example.name}" required="true" /> <span
 						class="text-danger" th:if="${#fields.hasErrors('name')}"
 						th:errors="*{name}" />
 				</div>
@@ -33,7 +33,7 @@
 				<label class="control-label col-sm-2" for="password" th:text="#{login.password}"></label>
 				<div class="col-sm-10">
 					<input type="password" class="form-control" name="password"
-						placeholder="Entre el Password" /> <span class="text-danger"
+						th:placeholder="#{example.password}" /> <span class="text-danger"
 						th:if="${#fields.hasErrors('password')}" th:errors="*{password}" />
 				</div>
 			</div>
@@ -41,7 +41,7 @@
 				<label class="control-label col-sm-2" for="passwordConfirm" th:text="#{signup.repeat}"></label>
 				<div class="col-sm-10">
 					<input type="password" class="form-control" name="passwordConfirm"
-						placeholder="Repita el Password" /> <span class="text-danger"
+						th:placeholder="#{example.repassword}" /> <span class="text-danger"
 						th:if="${#fields.hasErrors('passwordConfirm')}"
 						th:errors="*{passwordConfirm}" />
 				</div>
