@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+	<nav th:replace="fragments/nav" />
+	<div class="container" style="text-align: center">
+		<h2 th:text="#{welcome.message}"></h2>
+		<h3>Esta es una zona privada la web</h3>
+		<p>
+			Usuario Autenticado como : <b th:inline="text">
+				[[${#httpServletRequest.remoteUser}]] </b>
+		</p>
+	</div>
+	<footer th:replace="fragments/footer" />
+</body>
+</html>

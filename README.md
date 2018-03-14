@@ -6,4 +6,4 @@ This is the repo to develop the first deliverable for the GIISOF01-3-005 subject
 ## Mandatory Test to merge with master
 - circle-ci build
 - circle-ci tests
-- pullaprove
+- pullaprove 
