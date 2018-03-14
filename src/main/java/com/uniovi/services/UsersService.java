@@ -45,8 +45,11 @@ public class UsersService {
 	}
 
 	public Page<User> getUsers(Pageable pageable) {
-		Page<User> users = repository.findAll(pageable);
-		return users;
+		return repository.findAll(pageable);
+	}
+
+	public Iterable<User> getUsers() {
+		return repository.findAll();
 	}
 
 	public List<User> searchUsersByEmailAndName(String searchText) {
