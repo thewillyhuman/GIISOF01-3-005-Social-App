@@ -51,7 +51,7 @@ public class User {
     public User() {
 
     }
-    
+
     public long getId() {
 	return this.id;
     }
@@ -134,24 +134,19 @@ public class User {
     public void setRequests(Set<User> friendRequests) {
 	this.requests = friendRequests;
     }
-   
+
+    @Transactional
     public void acceptRequestFrom(User user) {
 	if (this.getRequests().contains(user)) {
-	    if (this.friends.add(user))
-		System.err.println("Inserted in friends");
-	    else
-		System.err.println("Not inserted in friends");
-
-	    if (user.getFriends().add(this))
-		System.err.println("Inserted in requester friends");
-	    else
-		System.err.println("Not inserted in requester friends");
-
-	    if (this.requests.remove(user))
-		System.err.println("Removed from requests");
-	    else
-		System.err.println("Not removed from requests");
+	    // Add the relation to one side.
+	    this.friends.add(user);
 	    
+	    // Add the relation to another side.
+	    user.getFriends().add(this);
+	    
+	    // Remove the user request
+	    this.requests.remove(user);
+
 	} else {
 	    System.err.println("There's no request from that user");
 	}
@@ -166,7 +161,7 @@ public class User {
 	if (!(other instanceof User))
 	    return false;
 	User otherUser = (User) other;
-	if(this.email==otherUser.getEmail())
+	if (this.email == otherUser.getEmail())
 	    return true;
 	else
 	    return false;
