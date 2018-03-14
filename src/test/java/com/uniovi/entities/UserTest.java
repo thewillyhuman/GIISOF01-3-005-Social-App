@@ -1,12 +1,3 @@
-/*
- * This source file is part of the SocialApp open source project.
- *
- * Copyright (c) 2018 willy and the SocialApp project authors.
- * Licensed under GNU General Public License v3.0.
- *
- * See /LICENSE for license information.
- * 
- */
 package com.uniovi.entities;
 
 import static org.junit.Assert.*;
@@ -90,5 +81,4 @@ public class UserTest {
 	u1.acceptRequestFrom((User) u2);
 	assertEquals(1, u1.getFriends().size());
     }
-
 }
