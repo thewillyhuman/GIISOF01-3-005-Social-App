@@ -42,6 +42,10 @@ public class UsersService {
 		repository.save(user);
 	}
 
+	public void updateUser(User user) {
+		repository.save(user);
+	}
+
 	public void removeUser(User user) {
 		repository.delete(user);
 	}
@@ -59,10 +63,6 @@ public class UsersService {
 		String search = "%" + searchText + "%";
 		marks = repository.searchUsersByEmailAndName(search);
 		return marks;
-	}
-
-	public Set<User> getPeticiones(User user) {
-		return user.getRequests();
 	}
 
 }
