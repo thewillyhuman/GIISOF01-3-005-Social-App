@@ -9,25 +9,44 @@
  */
 package com.uniovi.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
 
-import com.uniovi.entities.UserInterface;
-//import com.uniovi.entities.impl.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.yaml.snakeyaml.error.Mark;
+
+import com.uniovi.entities.User;
 
 /**
  * Instance of UsersRepository.java
  * 
- * @author 
- * @version 
+ * @author
+ * @version
  */
-public interface UsersRepository extends CrudRepository<UserInterface, Long> {
-	
+public interface UsersRepository extends CrudRepository<User, Long> {
+
 	/**
 	 * Finds a given user by its email.
 	 * 
-	 * @param email of the user you want to find.
+	 * @param email
+	 *            of the user you want to find.
 	 * @return the user if found. Null otherwise.
 	 */
-	UserInterface findByEmail(String email);
+	User findByEmail(String email);
+
+	/**
+	 * Find all users in pageable format
+	 * 
+	 * @param pageable
+	 * @return
+	 */
+	Page<User> findAll(Pageable pageable);
+
+	// WILLY COMEEENTALO
+	@Query("SELECT r FROM User r WHERE (LOWER(r.name) LIKE LOWER(?1) OR LOWER(r.email) LIKE LOWER(?1))")
+	List<User> searchUsersByEmailAndName(String seachtext);
+
 
 }
