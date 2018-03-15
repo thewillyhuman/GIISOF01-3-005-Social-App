@@ -1,6 +1,7 @@
 package com.uniovi.entities;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Entity
@@ -41,6 +45,9 @@ public class User {
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> requests = new HashSet<User>();
+
+	@Transient
+	private Page<User> f;
 
 	public User(String name, String email) {
 		setName(name);
@@ -124,6 +131,10 @@ public class User {
 		this.friends = friends;
 	}
 
+	public Page<User> getF(Pageable pageable) {
+		return new PageImpl<User>(new LinkedList<User>(getRequests()));
+	}
+
 	public Set<User> getRequests() {
 		if (requests == null)
 			requests = new HashSet<User>();
@@ -136,21 +147,21 @@ public class User {
 	}
 
 	@Transactional
-  public void acceptRequestFrom(User user) {
-	  if (this.getRequests().contains(user)) {
-	    // Add the relation to one side.
-	    this.friends.add(user);
-	    
-	    // Add the relation to another side.
-	    user.getFriends().add(this);
-	    
-	    // Remove the user request
-	    this.requests.remove(user);
+	public void acceptRequestFrom(User user) {
+		if (this.getRequests().contains(user)) {
+			// Add the relation to one side.
+			this.friends.add(user);
 
-	  } else {
-	    System.err.println("There's no request from that user");
-	  }
-  }
+			// Add the relation to another side.
+			user.getFriends().add(this);
+
+			// Remove the user request
+			this.requests.remove(user);
+
+		} else {
+			System.err.println("There's no request from that user");
+		}
+	}
 
 	@Override
 	public boolean equals(Object other) {

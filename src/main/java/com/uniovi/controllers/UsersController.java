@@ -77,7 +77,7 @@ public class UsersController {
 			@RequestParam(value = "", required = false) String searchText) {
 		Page<User> users = new PageImpl<User>(new LinkedList<User>());
 		if (searchText != null && !searchText.isEmpty()) {
-			users = usersService.searchUsersByEmailAndName(searchText,pageable);
+			users = usersService.searchUsersByEmailAndName(searchText, pageable);
 		} else {
 			users = usersService.getUsers(pageable);
 		}
@@ -128,7 +128,7 @@ public class UsersController {
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
 
-		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getFriends()));
+		Page<User> users = activeUser.getF(pageable);
 
 		model.addAttribute("amigos", users.getContent());
 		model.addAttribute("page", users);

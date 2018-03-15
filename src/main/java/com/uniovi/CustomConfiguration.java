@@ -21,7 +21,7 @@ public class CustomConfiguration extends  WebMvcConfigurerAdapter{
 		PageableHandlerMethodArgumentResolver resolver =
 				new PageableHandlerMethodArgumentResolver();
 		
-		resolver.setFallbackPageable(new PageRequest(0, 5));
+		resolver.setFallbackPageable(new PageRequest(0, 2));
 		argumentResolvers.add(resolver);
 		super.addArgumentResolvers(argumentResolvers);
 	}
