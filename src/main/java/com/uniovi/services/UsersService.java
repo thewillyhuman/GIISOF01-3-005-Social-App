@@ -1,6 +1,7 @@
 package com.uniovi.services;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -58,10 +59,10 @@ public class UsersService {
 		return repository.findAll();
 	}
 
-	public List<User> searchUsersByEmailAndName(String searchText) {
-		List<User> marks = new ArrayList<User>();
+	public Page<User> searchUsersByEmailAndName(String searchText,Pageable pageable) {
+		Page<User> marks = new PageImpl<User>(new LinkedList<User>());
 		String search = "%" + searchText + "%";
-		marks = repository.searchUsersByEmailAndName(search);
+		marks = repository.searchUsersByEmailAndName(search,pageable);
 		return marks;
 	}
 

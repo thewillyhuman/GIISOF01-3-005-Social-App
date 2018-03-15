@@ -76,13 +76,12 @@ public class UsersController {
 	public String getList(Model model, Pageable pageable,
 			@RequestParam(value = "", required = false) String searchText) {
 		Page<User> users = new PageImpl<User>(new LinkedList<User>());
-		users = usersService.getUsers(pageable);
 		if (searchText != null && !searchText.isEmpty()) {
-			model.addAttribute("userList", usersService.searchUsersByEmailAndName(searchText));
+			users = usersService.searchUsersByEmailAndName(searchText,pageable);
 		} else {
-			model.addAttribute("userList", users.getContent());
+			users = usersService.getUsers(pageable);
 		}
-
+		model.addAttribute("userList", users.getContent());
 		model.addAttribute("page", users);
 
 		return "user/list";
@@ -96,7 +95,7 @@ public class UsersController {
 		User activeUser = usersService.getUserByEmail(email);
 		friend.getRequests().add(activeUser);
 		usersService.updateUser(activeUser);
-		return "home";
+		return "redirect:/user/list";
 	}
 
 	@RequestMapping("/user/acceptFriendRequest/{id}")
@@ -107,7 +106,7 @@ public class UsersController {
 		User activeUser = usersService.getUserByEmail(email);
 		activeUser.acceptRequestFrom(friend);
 		usersService.saveUser(activeUser);
-		return "home";
+		return "redirect:/user/peticiones";
 	}
 
 	@RequestMapping("/user/peticiones")
@@ -134,6 +133,11 @@ public class UsersController {
 		model.addAttribute("amigos", users.getContent());
 		model.addAttribute("page", users);
 		return "user/amigos";
+	}
+
+	@RequestMapping("/publication/add")
+	public String getAmigos(Model model) {
+		return "/publication/add";
 	}
 
 }
