@@ -115,7 +115,7 @@ public class UsersController {
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
 
-		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getRequests()));
+		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getRequests(pageable)));
 
 		model.addAttribute("peticiones", users.getContent());
 		model.addAttribute("page", users);
@@ -128,7 +128,7 @@ public class UsersController {
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
 
-		Page<User> users = activeUser.getF(pageable);
+		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getFriends(pageable)));
 
 		model.addAttribute("amigos", users.getContent());
 		model.addAttribute("page", users);

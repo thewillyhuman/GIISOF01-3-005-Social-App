@@ -46,9 +46,6 @@ public class User {
 	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> requests = new HashSet<User>();
 
-	@Transient
-	private Page<User> f;
-
 	public User(String name, String email) {
 		setName(name);
 		setEmail(email);
@@ -123,6 +120,10 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 	}
 
+	public Set<User> getFriends(Pageable pageable) {
+		return friends;
+	}
+
 	public Set<User> getFriends() {
 		return friends;
 	}
@@ -131,8 +132,11 @@ public class User {
 		this.friends = friends;
 	}
 
-	public Page<User> getF(Pageable pageable) {
-		return new PageImpl<User>(new LinkedList<User>(getRequests()));
+	public Set<User> getRequests(Pageable pageable) {
+		if (requests == null)
+			requests = new HashSet<User>();
+
+		return requests;
 	}
 
 	public Set<User> getRequests() {
