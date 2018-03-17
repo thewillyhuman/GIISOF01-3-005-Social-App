@@ -9,8 +9,6 @@
  */
 package com.uniovi.repositories;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -46,5 +44,11 @@ public interface UsersRepository extends CrudRepository<User, Long> {
 	// WILLY COMEEENTALO
 	@Query("SELECT r FROM User r WHERE (LOWER(r.name) LIKE LOWER(?1) OR LOWER(r.email) LIKE LOWER(?1))")
 	Page<User> searchUsersByEmailAndName(String seachtext, Pageable pageable);
+
+	@Query("SELECT r.requests FROM User r where r.id= ?1")
+	Page<User> findRequestByUser(Long id, Pageable pageable);
+
+	@Query("SELECT r.friends FROM User r where r.id= ?1")
+	Page<User> findFriendsByUser(Long id, Pageable pageable);
 
 }

@@ -59,11 +59,21 @@ public class UsersService {
 		return repository.findAll();
 	}
 
-	public Page<User> searchUsersByEmailAndName(String searchText,Pageable pageable) {
+	public Page<User> searchUsersByEmailAndName(String searchText, Pageable pageable) {
 		Page<User> marks = new PageImpl<User>(new LinkedList<User>());
 		String search = "%" + searchText + "%";
-		marks = repository.searchUsersByEmailAndName(search,pageable);
+		marks = repository.searchUsersByEmailAndName(search, pageable);
 		return marks;
+	}
+
+	public Page<User> getRequestsByUser(Long id, Pageable pageable) {
+		return repository.findRequestByUser(id, pageable);
+
+	}
+
+	public Page<User> getFriendsByUser(Long id, Pageable pageable) {
+		return repository.findFriendsByUser(id, pageable);
+
 	}
 
 }

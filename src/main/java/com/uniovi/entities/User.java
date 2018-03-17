@@ -38,12 +38,12 @@ public class User {
 
 	// List of friends.
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> friends = new HashSet<User>();
 
 	// List of friend requests.
-	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> requests = new HashSet<User>();
 
 	public User(String name, String email) {
