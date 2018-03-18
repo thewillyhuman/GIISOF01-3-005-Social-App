@@ -45,10 +45,4 @@ public interface UsersRepository extends CrudRepository<User, Long> {
 	@Query("SELECT r FROM User r WHERE (LOWER(r.name) LIKE LOWER(?1) OR LOWER(r.email) LIKE LOWER(?1))")
 	Page<User> searchUsersByEmailAndName(String seachtext, Pageable pageable);
 
-	@Query("SELECT r.requests FROM User r where r.id= ?1")
-	Page<User> findRequestByUser(Long id, Pageable pageable);
-
-	@Query("SELECT r.friends FROM User r where r.id= ?1")
-	Page<User> findFriendsByUser(Long id, Pageable pageable);
-
 }

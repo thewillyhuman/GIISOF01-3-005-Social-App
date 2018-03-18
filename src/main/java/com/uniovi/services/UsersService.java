@@ -1,9 +1,6 @@
 package com.uniovi.services;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,55 +22,49 @@ import com.uniovi.repositories.UsersRepository;
 public class UsersService {
 
 	@Autowired
-	private UsersRepository repository;
+	private UsersRepository usersRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public User getUser(Long id) {
-		return repository.findOne(id);
+		return usersRepository.findOne(id);
 	}
 
 	public User getUserByEmail(String email) {
-		return repository.findByEmail(email);
+		return usersRepository.findByEmail(email);
 	}
 
 	public void saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		repository.save(user);
+		usersRepository.save(user);
 	}
 
 	public void updateUser(User user) {
-		repository.save(user);
+		usersRepository.save(user);
 	}
 
 	public void removeUser(User user) {
-		repository.delete(user);
+		usersRepository.delete(user);
 	}
 
 	public Page<User> getUsers(Pageable pageable) {
-		return repository.findAll(pageable);
+		return usersRepository.findAll(pageable);
 	}
 
 	public Iterable<User> getUsers() {
-		return repository.findAll();
+		return usersRepository.findAll();
 	}
 
 	public Page<User> searchUsersByEmailAndName(String searchText, Pageable pageable) {
-		Page<User> marks = new PageImpl<User>(new LinkedList<User>());
+		Page<User> users = new PageImpl<User>(new LinkedList<User>());
 		String search = "%" + searchText + "%";
-		marks = repository.searchUsersByEmailAndName(search, pageable);
-		return marks;
+		users = usersRepository.searchUsersByEmailAndName(search, pageable);
+		return users;
 	}
 
-	public Page<User> getRequestsByUser(Long id, Pageable pageable) {
-		return repository.findRequestByUser(id, pageable);
-
-	}
-
-	public Page<User> getFriendsByUser(Long id, Pageable pageable) {
-		return repository.findFriendsByUser(id, pageable);
-
+	public void acceptRequest(User emisor, User receptor) {
+		receptor.acceptRequest(emisor, receptor);
 	}
 
 }

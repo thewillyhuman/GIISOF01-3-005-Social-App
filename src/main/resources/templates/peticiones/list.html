@@ -3,10 +3,9 @@
 
 <head th:replace="fragments/head" />
 
-<nav th:replace="fragments/nav" />
-
-
 <body>
+
+	<nav th:replace="fragments/nav" />
 
 	<div class="table-responsive">
 		<table class="table table-hover" th:fragment="tablePeticiones"
@@ -22,11 +21,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="user : ${peticiones}">
-					<td th:text="${user.id}">1</td>
-					<td th:text="${user.name}">Usuario 1</td>
-					<td th:text="${user.email}">ejemplo@ejemplo.com</td>
-					<td><a th:href="${'/user/acceptFriendRequest/' + user.id }"
+				<tr th:each="p : ${peticiones}">
+					<td th:text="${p.emisor.id}">1</td>
+					<td th:text="${p.emisor.name}">Usuario 1</td>
+					<td th:text="${p.emisor.email}">ejemplo@ejemplo.com</td>
+					<td><a th:href="${'user/acceptRequest/' + p.emisor.id + '/' + p.id }"
 						th:text="#{Button.confirmRequest}"></a></td>
 				</tr>
 			</tbody>

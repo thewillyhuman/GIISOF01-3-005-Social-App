@@ -12,7 +12,7 @@
 			<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">
 				<li><a href="/" th:text="#{home.message}"></a></li>
 				<li><a href="/user/list" th:text="#{show.users}"></a></li>
-				<li><a href="/user/peticiones" th:text="#{show.requests}"></a></li>
+				<li><a href="/peticiones/list" th:text="#{show.requests}"></a></li>
 				<li><a href="/user/amigos" th:text="#{show.friends}"></a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

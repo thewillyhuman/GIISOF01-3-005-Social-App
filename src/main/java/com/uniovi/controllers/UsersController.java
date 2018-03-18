@@ -7,18 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uniovi.entities.User;
 import com.uniovi.services.SecurityService;
@@ -59,7 +55,7 @@ public class UsersController {
 		// user.setRole(rolesService.getRoles()[0]);
 		usersService.saveUser(user);
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
-		return "redirect:home";
+		return "redirect:user/list";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -87,57 +83,57 @@ public class UsersController {
 		return "user/list";
 	}
 
-	@RequestMapping("/user/addFriendRequest/{id}")
-	public String addFriendRequest(Model model, @PathVariable Long id) {
-		User friend = usersService.getUser(id);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getName();
-		User activeUser = usersService.getUserByEmail(email);
-		friend.getRequests().add(activeUser);
-		usersService.updateUser(activeUser);
-		return "redirect:/user/list";
-	}
-
-	@RequestMapping("/user/acceptFriendRequest/{id}")
-	public String acceptFriendRequest(Model model, @PathVariable Long id) {
-		User friend = usersService.getUser(id);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getName();
-		User activeUser = usersService.getUserByEmail(email);
-		activeUser.acceptRequestFrom(friend);
-		usersService.saveUser(activeUser);
-		return "redirect:/user/peticiones";
-	}
-
-	@RequestMapping("/user/peticiones")
-	public String getPeticiones(Model model, Pageable pageable) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getName();
-		User activeUser = usersService.getUserByEmail(email);
-
-		Page<User> users = usersService.getRequestsByUser(activeUser.getId(), pageable);
-
-		model.addAttribute("peticiones", users.getContent());
-		model.addAttribute("page", users);
-		return "user/peticiones";
-	}
-
-	@RequestMapping("/user/amigos")
-	public String getAmigos(Model model, Pageable pageable) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getName();
-		User activeUser = usersService.getUserByEmail(email);
-
-		Page<User> users = usersService.getFriendsByUser(activeUser.getId(), pageable);
-
-		model.addAttribute("amigos", users.getContent());
-		model.addAttribute("page", users);
-		return "user/amigos";
-	}
-
-	@RequestMapping("/publication/add")
-	public String getAmigos(Model model) {
-		return "/publication/add";
-	}
+//	@RequestMapping("/user/addFriendRequest/{id}")
+//	public String addFriendRequest(Model model, @PathVariable Long id) {
+//		User friend = usersService.getUser(id);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String email = auth.getName();
+//		User activeUser = usersService.getUserByEmail(email);
+////		friend.getRequests().add(activeUser);
+//		usersService.updateUser(activeUser);
+//		return "redirect:/user/list";
+//	}
+//
+//	@RequestMapping("/user/acceptFriendRequest/{id}")
+//	public String acceptFriendRequest(Model model, @PathVariable Long id) {
+//		User friend = usersService.getUser(id);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String email = auth.getName();
+//		User activeUser = usersService.getUserByEmail(email);
+////		activeUser.acceptRequestFrom(friend);
+//		usersService.saveUser(activeUser);
+//		return "redirect:/user/peticiones";
+//	}
+//
+//	@RequestMapping("/user/peticiones")
+//	public String getPeticiones(Model model, Pageable pageable) {
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String email = auth.getName();
+//		User activeUser = usersService.getUserByEmail(email);
+//
+//		Page<User> users = usersService.getRequestsByUser(activeUser.getId(), pageable);
+//
+//		model.addAttribute("peticiones", users.getContent());
+//		model.addAttribute("page", users);
+//		return "user/peticiones";
+//	}
+//
+//	@RequestMapping("/user/amigos")
+//	public String getAmigos(Model model, Pageable pageable) {
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String email = auth.getName();
+//		User activeUser = usersService.getUserByEmail(email);
+//
+//		Page<User> users = usersService.getFriendsByUser(activeUser.getId(), pageable);
+//
+//		model.addAttribute("amigos", users.getContent());
+//		model.addAttribute("page", users);
+//		return "user/amigos";
+//	}
+//
+//	@RequestMapping("/publication/add")
+//	public String getAmigos(Model model) {
+//		return "/publication/add";
+//	}
 
 }

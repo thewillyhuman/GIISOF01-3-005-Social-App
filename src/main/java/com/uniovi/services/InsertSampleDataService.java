@@ -13,6 +13,9 @@ public class InsertSampleDataService {
 	@Autowired
 	private UsersService usersService;
 
+	@Autowired
+	private RequestsService requestsService;
+
 	@PostConstruct
 	public void init() {
 		User user1 = new User("Pedro", "p1@hotmail.com");
@@ -37,23 +40,30 @@ public class InsertSampleDataService {
 		User user10 = new User("M.Khalifa", "p10@hotmail.com");
 		user10.setPassword("123123");
 		User user11 = new User("Darth Vader", "p11@hotmail.com");
-		user11.setPassword("123123");
+		user11.setPassword("123	123");
 		User user12 = new User("De la cal", "p12@hotmail.com");
 		user12.setPassword("123123");
 
+	
 		usersService.saveUser(user1);
 		usersService.saveUser(user2);
 		usersService.saveUser(user3);
 		usersService.saveUser(user4);
 		usersService.saveUser(user5);
 		usersService.saveUser(user6);
-		
+
 		usersService.saveUser(user7);
 		usersService.saveUser(user8);
 		usersService.saveUser(user9);
 		usersService.saveUser(user10);
 		usersService.saveUser(user11);
 		usersService.saveUser(user12);
+		
+		requestsService.sendRequest(user2, user1);
+		requestsService.sendRequest(user3, user1);
+		requestsService.sendRequest(user4, user1);
+		requestsService.sendRequest(user5, user1);
+		requestsService.sendRequest(user6, user1);
 
 	}
 
