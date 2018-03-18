@@ -16,6 +16,7 @@ import com.uniovi.repositories.UsersRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+	
 	@Autowired
 	private UsersRepository usersRepository;
 

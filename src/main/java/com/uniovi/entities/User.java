@@ -1,6 +1,7 @@
 package com.uniovi.entities;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Entity
@@ -34,12 +38,12 @@ public class User {
 
 	// List of friends.
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> friends = new HashSet<User>();
 
 	// List of friend requests.
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> requests = new HashSet<User>();
 
 	public User(String name, String email) {
@@ -136,21 +140,21 @@ public class User {
 	}
 
 	@Transactional
-  public void acceptRequestFrom(User user) {
-	  if (this.getRequests().contains(user)) {
-	    // Add the relation to one side.
-	    this.friends.add(user);
-	    
-	    // Add the relation to another side.
-	    user.getFriends().add(this);
-	    
-	    // Remove the user request
-	    this.requests.remove(user);
+	public void acceptRequestFrom(User user) {
+		if (this.getRequests().contains(user)) {
+			// Add the relation to one side.
+			this.friends.add(user);
 
-	  } else {
-	    System.err.println("There's no request from that user");
-	  }
-  }
+			// Add the relation to another side.
+			user.getFriends().add(this);
+
+			// Remove the user request
+			this.requests.remove(user);
+
+		} else {
+			System.err.println("There's no request from that user");
+		}
+	}
 
 	@Override
 	public boolean equals(Object other) {
