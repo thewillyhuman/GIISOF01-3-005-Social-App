@@ -1,15 +1,24 @@
 package com.uniovi.entities;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 public class User {
@@ -27,11 +36,15 @@ public class User {
 	@Transient
 	private String passwordConfirm;
 
-	@OneToMany(mappedBy = "emisor", cascade = CascadeType.ALL)
-	private Set<Request> requestsEnviadas = new HashSet<Request>();
+	// List of friends.
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	private Set<User> friends = new HashSet<User>();
 
-	@OneToMany(mappedBy = "receptor", cascade = CascadeType.ALL)
-	private Set<Request> requestsRecibidas = new HashSet<Request>();
+	// List of friend requests.
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	private Set<User> requests = new HashSet<User>();
 
 	public User(String name, String email) {
 		setName(name);
@@ -107,6 +120,53 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 	}
 
+	public Set<User> getFriends(Pageable pageable) {
+		return friends;
+	}
+
+	public Set<User> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Set<User> friends) {
+		this.friends = friends;
+	}
+
+	public Set<User> getRequests(Pageable pageable) {
+		if (requests == null)
+			requests = new HashSet<User>();
+
+		return requests;
+	}
+
+	public Set<User> getRequests() {
+		if (requests == null)
+			requests = new HashSet<User>();
+
+		return requests;
+	}
+
+	public void setRequests(Set<User> friendRequests) {
+		this.requests = friendRequests;
+	}
+
+	@Transactional
+	public void acceptRequestFrom(User user) {
+		if (this.getRequests().contains(user)) {
+			// Add the relation to one side.
+			this.friends.add(user);
+
+			// Add the relation to another side.
+			user.getFriends().add(this);
+
+			// Remove the user request
+			this.requests.remove(user);
+
+		} else {
+			System.err.println("There's no request from that user");
+		}
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		if (other == null)
@@ -121,40 +181,5 @@ public class User {
 		else
 			return false;
 	}
-
-	public Set<Request> getRequestsEnviadas() {
-		return requestsEnviadas;
-	}
-
-	public void setRequestsEnviadas(Set<Request> requestsEnviadas) {
-		this.requestsEnviadas = requestsEnviadas;
-	}
-
-	public Set<Request> getRequestsRecibidas() {
-		return requestsRecibidas;
-	}
-
-	public void setRequestsRecibidas(Set<Request> requestsRecibidas) {
-		this.requestsRecibidas = requestsRecibidas;
-	}
-
-	public void addRequest(Request request, User emisor, User receptor) {
-		emisor.getRequestsEnviadas().add(request);
-		receptor.getRequestsRecibidas().add(request);
-	}
-
-	public void removeRequest(Request request, User sender, User reciever) {
-		sender.getRequestsEnviadas().remove(request);
-		reciever.getRequestsRecibidas().remove(request);
-		request.setEmisor(null);
-		request.setReceptor(null);
-	}
-
-	public void acceptRequest(User emisor, User receptor) {
-		// emisor.getFriends().add(receptor);
-		// receptor.getFriends().add(emisor);
-	}
-
-
 
 }

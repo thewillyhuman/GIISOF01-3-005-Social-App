@@ -63,8 +63,13 @@ public class UsersService {
 		return users;
 	}
 
-	public void acceptRequest(User emisor, User receptor) {
-		receptor.acceptRequest(emisor, receptor);
+	public Page<User> getRequestsByUser(Long id, Pageable pageable) {
+		return usersRepository.findRequestByUser(id, pageable);
+
 	}
 
+	public Page<User> getFriendsByUser(Long id, Pageable pageable) {
+		return usersRepository.findFriendsByUser(id, pageable);
+
+	}
 }
