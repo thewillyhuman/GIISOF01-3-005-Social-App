@@ -42,7 +42,7 @@ public class User {
 	private Set<User> friends = new HashSet<User>();
 
 	// List of friend requests.
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> requests = new HashSet<User>();
 
@@ -120,23 +120,12 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 	}
 
-	public Set<User> getFriends(Pageable pageable) {
-		return friends;
-	}
-
 	public Set<User> getFriends() {
 		return friends;
 	}
 
 	public void setFriends(Set<User> friends) {
 		this.friends = friends;
-	}
-
-	public Set<User> getRequests(Pageable pageable) {
-		if (requests == null)
-			requests = new HashSet<User>();
-
-		return requests;
 	}
 
 	public Set<User> getRequests() {
