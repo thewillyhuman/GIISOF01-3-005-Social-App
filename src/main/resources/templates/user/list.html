@@ -39,12 +39,16 @@
 
 							<div th:if="${!user.isFriend(activeUser)}">
 								<div th:if="${!user.hasRequest(activeUser)}">
+								
+									<button type="button" th:id="${'addRequest' + user.id}" class="btn btn-primary"
+										th:text="#{Button.add.friend}"></button>
 
-									<form th:action="${'/user/addFriendRequest/' + user.id }"
-										method="post">
-										<button type="submit" class="btn btn-primary"
-											th:text="#{Button.add.friend}"></button>
-									</form>
+									<script th:inline="javascript">
+										/*<![CDATA[*/
+										$("#addRequest[[${user.id}]]").click(function() {
+															$("#tableUsers").load('/user/addFriendRequest/[[${user.id}]]');});
+										/*]]>*/
+									</script>
 
 								</div>
 
@@ -69,9 +73,8 @@
 			</table>
 		</div>
 
-		<footer th:replace="fragments/pagination" />
-
-
+			<footer th:replace="fragments/pagination" />
+	
 	</div>
 
 

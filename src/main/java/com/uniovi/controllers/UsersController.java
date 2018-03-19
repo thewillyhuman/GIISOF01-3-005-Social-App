@@ -106,7 +106,7 @@ public class UsersController {
 		return "user/list :: tableUsers";
 	}
 
-	@RequestMapping(value = "/user/addFriendRequest/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/addFriendRequest/{id}")
 	public String addFriendRequest(Model model, @PathVariable Long id) {
 		User friend = usersService.getUser(id);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
