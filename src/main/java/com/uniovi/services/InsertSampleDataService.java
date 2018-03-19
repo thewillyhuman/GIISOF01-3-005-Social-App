@@ -43,16 +43,6 @@ public class InsertSampleDataService {
 		user12.setPassword("123123");
 
 		user1.getRequests().add(user2);
-		user1.getRequests().add(user3);
-		user1.getRequests().add(user4);
-		user1.getRequests().add(user5);
-		user1.getRequests().add(user5);
-		
-		user1.getRequests().add(user6);
-		user1.getRequests().add(user7);
-		user1.getRequests().add(user8);
-		user1.getRequests().add(user9);
-		user1.getRequests().add(user10);
 		
 		usersService.saveUser(user1);
 		usersService.saveUser(user2);
