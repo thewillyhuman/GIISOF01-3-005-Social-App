@@ -16,28 +16,44 @@ import javax.persistence.Transient;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Entity
 public class User {
 	@Id
+	@Getter
 	@GeneratedValue
 	private long id;
 
+	@Getter
+	@Setter
 	private String name;
 
+	@Getter
+	@Setter
 	@Column(unique = true)
 	private String email;
 
+	@Getter
+	@Setter
 	private String password;
 
+	@Getter
+	@Setter
 	@Transient
 	private String passwordConfirm;
 
 	// List of friends.
+	@Getter @Setter
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	@JoinTable(name = "friends", joinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> friends = new HashSet<User>();
 
 	// List of friend requests.
+	@Getter @Setter
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	@JoinTable(name = "requests", joinColumns = @JoinColumn(name = "requester_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> requests = new HashSet<User>();
@@ -50,88 +66,6 @@ public class User {
 
 	public User() {
 
-	}
-
-	public long getId() {
-		return this.id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * @param email
-	 *            the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @param password
-	 *            the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
-	 * @return the passwordConfirm
-	 */
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-
-	/**
-	 * @param passwordConfirm
-	 *            the passwordConfirm to set
-	 */
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
-
-	public Set<User> getFriends() {
-		return friends;
-	}
-
-	public void setFriends(Set<User> friends) {
-		this.friends = friends;
-	}
-
-	public Set<User> getRequests() {
-		if (requests == null)
-			requests = new HashSet<User>();
-		return requests;
-	}
-
-	public void setRequests(Set<User> friendRequests) {
-		this.requests = friendRequests;
 	}
 
 	@Transactional
@@ -147,7 +81,7 @@ public class User {
 			this.requests.remove(user);
 
 		} else {
-			System.err.println("There's no request from that user");
+			log.warn("[WARNING]: (" + this.getEmail() + ") Has no request from: "+ user.getEmail());
 		}
 	}
 

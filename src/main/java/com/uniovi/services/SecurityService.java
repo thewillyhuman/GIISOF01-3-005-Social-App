@@ -1,15 +1,16 @@
 package com.uniovi.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;;
+import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;;
+
+@Slf4j
 @Service
 public class SecurityService {
 	@Autowired
@@ -18,14 +19,12 @@ public class SecurityService {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
-
 	public String findLoggedInDni() {
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
 		if (userDetails instanceof UserDetails) {
 			return ((UserDetails) userDetails).getUsername();
 		}
-
+		log.warn("[ERROR]: Current user dni not found in persistence. ");
 		return null;
 	}
 
@@ -39,7 +38,7 @@ public class SecurityService {
 
 		if (aToken.isAuthenticated()) {
 			SecurityContextHolder.getContext().setAuthentication(aToken);
-			logger.debug(String.format("Auto login %s successfully!", dni));
+			log.warn(String.format("[INFO]: Auto login for (%s) successfully!", dni));
 		}
 	}
 

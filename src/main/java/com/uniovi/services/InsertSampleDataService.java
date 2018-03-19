@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.uniovi.entities.User;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class InsertSampleDataService {
 
@@ -16,6 +19,7 @@ public class InsertSampleDataService {
 
 	@PostConstruct
 	public void init() {
+	    	log.warn("[INFO]: Inserting sample data in the application");
 		User user1 = new User("Pedro", "p1@hotmail.com");
 		user1.setPassword("123123");
 		User user2 = new User("Lucas", "p2@hotmail.com");
@@ -43,16 +47,7 @@ public class InsertSampleDataService {
 		user12.setPassword("123123");
 
 		user1.getRequests().add(user2);
-		user1.getRequests().add(user3);
-		user1.getRequests().add(user4);
-		user1.getRequests().add(user5);
-		user1.getRequests().add(user5);
-		
-		user1.getRequests().add(user6);
-		user1.getRequests().add(user7);
-		user1.getRequests().add(user8);
-		user1.getRequests().add(user9);
-		user1.getRequests().add(user10);
+		//user4.getFriends().add(user1);
 		
 		usersService.saveUser(user1);
 		usersService.saveUser(user2);
@@ -67,6 +62,7 @@ public class InsertSampleDataService {
 		usersService.saveUser(user10);
 		usersService.saveUser(user11);
 		usersService.saveUser(user12);
+		log.warn("[INFO]: Sample data inserted correctly in the application");
 
 	}
 
