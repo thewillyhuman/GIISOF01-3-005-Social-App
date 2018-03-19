@@ -110,17 +110,6 @@ public class UsersController {
 		return "user/list :: tableUsers";
 	}
 
-	// @RequestMapping(value = "/user/addFriendRequest/{id}")
-	// public String addFriendRequest(Model model, @PathVariable Long id) {
-	// User friend = usersService.getUser(id);
-	// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	// String email = auth.getName();
-	// User activeUser = usersService.getUserByEmail(email);
-	// friend.getRequests().add(activeUser);
-	// usersService.updateUser(activeUser);
-	// return "redirect:/user/list/update";
-	// }
-
 	@RequestMapping("/user/acceptFriendRequest/{id}")
 	public String acceptFriendRequest(Model model, @PathVariable Long id) {
 		User friend = usersService.getUser(id);
