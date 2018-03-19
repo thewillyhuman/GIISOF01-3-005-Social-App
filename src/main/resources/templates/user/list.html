@@ -37,33 +37,41 @@
 						<td th:text="${user.email}">ejemplo@ejemplo.com</td>
 						<td>
 
-							<div th:if="${!user.isFriend(activeUser)}">
-								<div th:if="${!user.hasRequest(activeUser)}">
-								
-									<button type="button" th:id="${'addRequest' + user.id}" class="btn btn-primary"
-										th:text="#{Button.add.friend}"></button>
 
-									<script th:inline="javascript">
-										/*<![CDATA[*/
-										$("#addRequest[[${user.id}]]").click(function() {
-															$("#tableUsers").load('/user/addFriendRequest/[[${user.id}]]');});
-										/*]]>*/
-									</script>
-
+							<div th:if="${!user.equals(activeUser)}">
+								<div th:if="${!user.isFriend(activeUser)}">
+									<div th:if="${!user.hasRequest(activeUser)}">
+									
+										<button type="button" th:id="${'addRequest' + user.id}" class="btn btn-primary"
+											th:text="#{Button.add.friend}"></button>
+	
+										<script th:inline="javascript">
+											/*<![CDATA[*/
+											$("#addRequest[[${user.id}]]").click(function() {
+																var pageParam = [[${param.page}]];
+																$("#tableUsers").load('/user/list/update/?id=[[${user.id}]]&page='+pageParam);});
+											/*]]>*/
+										</script>
+	
+									</div>
+	
+									<div th:if="${user.hasRequest(activeUser)}">
+	
+										<span th:text="#{Button.already.request}"></span>
+									</div>
 								</div>
 
-								<div th:if="${user.hasRequest(activeUser)}">
-
-									<span th:text="#{Button.already.request}"></span>
+								<div th:if="${user.isFriend(activeUser)}">
+	
+									<span th:text="#{Button.already.friend}"></span>
+	
 								</div>
+							</div>	
+							
+							<div th:if="${user.equals(activeUser)}">
+								<span th:text="#{Button.same.user}"></span>
 							</div>
-
-							<div th:if="${user.isFriend(activeUser)}">
-
-								<span th:text="#{Button.already.friend}"></span>
-
-							</div>
-
+		
 
 						</td>
 
