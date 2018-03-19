@@ -1,7 +1,6 @@
 package com.uniovi.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,82 +21,55 @@ import com.uniovi.repositories.UsersRepository;
 @Service
 public class UsersService {
 
-    @Autowired
-    private UsersRepository repository;
+	@Autowired
+	private UsersRepository usersRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User getUser(Long id) {
-	return repository.findOne(id);
-    }
+	public User getUser(Long id) {
+		return usersRepository.findOne(id);
+	}
 
-    public User getUserByEmail(String email) {
-	return repository.findByEmail(email);
-    }
+	public User getUserByEmail(String email) {
+		return usersRepository.findByEmail(email);
+	}
 
-    public void saveUser(User user) {
-	user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-	repository.save(user);
-    }
+	public void saveUser(User user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		usersRepository.save(user);
+	}
 
-    public void updateUser(User user) {
-	repository.save(user);
-    }
+	public void updateUser(User user) {
+		usersRepository.save(user);
+	}
 
-    public void removeUser(User user) {
-	repository.delete(user);
-    }
+	public void removeUser(User user) {
+		usersRepository.delete(user);
+	}
 
-    public Page<User> getUsers(Pageable pageable) {
-	return repository.findAll(pageable);
-    }
-    
-    public Page<User> getFriends(User user, Pageable pageable) {
-	return getFriends(user.getId(), pageable);
-    }
+	public Page<User> getUsers(Pageable pageable) {
+		return usersRepository.findAll(pageable);
+	}
 
-    /**
-     * Gets the list of friends as a gageable for a given user.
-     * 
-     * @param id
-     * @param pageable
-     * @return
-     */
-    public Page<User> getFriends(long id, Pageable pageable) {
-	User user = repository.findOne(id);
-	List<User> listOfFriends = new ArrayList<User>();
-	listOfFriends.addAll(user.getFriends());
-	return new PageImpl<User>(listOfFriends, pageable, listOfFriends.size());
-    }
-    
-    public Page<User> getRequests(User user, Pageable pageable) {
-	return getRequests(user.getId(), pageable);
-    }
-    
-    /**
-     * Gets the list of requests as a gageable for a given user.
-     * 
-     * @param id
-     * @param pageable
-     * @return
-     */
-    public Page<User> getRequests(long id, Pageable pageable) {
-	User user = repository.findOne(id);
-	List<User> listOfRequests = new ArrayList<User>();
-	listOfRequests.addAll(user.getRequests());
-	return new PageImpl<User>(listOfRequests, pageable, listOfRequests.size());
-    }
+	public Iterable<User> getUsers() {
+		return usersRepository.findAll();
+	}
 
-    public Iterable<User> getUsers() {
-	return repository.findAll();
-    }
+	public Page<User> searchUsersByEmailAndName(String searchText, Pageable pageable) {
+		Page<User> users = new PageImpl<User>(new LinkedList<User>());
+		String search = "%" + searchText + "%";
+		users = usersRepository.searchUsersByEmailAndName(search, pageable);
+		return users;
+	}
 
-    public List<User> searchUsersByEmailAndName(String searchText) {
-	List<User> marks = new ArrayList<User>();
-	String search = "%" + searchText + "%";
-	marks = repository.searchUsersByEmailAndName(search);
-	return marks;
-    }
+	public Page<User> getRequestsByUser(Long id, Pageable pageable) {
+		return usersRepository.findRequestByUser(id, pageable);
 
+	}
+
+	public Page<User> getFriendsByUser(Long id, Pageable pageable) {
+		return usersRepository.findFriendsByUser(id, pageable);
+
+	}
 }

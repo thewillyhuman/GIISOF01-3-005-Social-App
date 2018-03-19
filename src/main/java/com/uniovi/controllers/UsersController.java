@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.uniovi.entities.User;
 import com.uniovi.services.SecurityService;
@@ -59,7 +58,7 @@ public class UsersController {
 		// user.setRole(rolesService.getRoles()[0]);
 		usersService.saveUser(user);
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
-		return "redirect:home";
+		return "redirect:user/list";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -76,13 +75,12 @@ public class UsersController {
 	public String getList(Model model, Pageable pageable,
 			@RequestParam(value = "", required = false) String searchText) {
 		Page<User> users = new PageImpl<User>(new LinkedList<User>());
-		users = usersService.getUsers(pageable);
 		if (searchText != null && !searchText.isEmpty()) {
-			model.addAttribute("userList", usersService.searchUsersByEmailAndName(searchText));
+			users = usersService.searchUsersByEmailAndName(searchText, pageable);
 		} else {
-			model.addAttribute("userList", users.getContent());
+			users = usersService.getUsers(pageable);
 		}
-
+		model.addAttribute("userList", users.getContent());
 		model.addAttribute("page", users);
 
 		return "user/list";
@@ -96,7 +94,7 @@ public class UsersController {
 		User activeUser = usersService.getUserByEmail(email);
 		friend.getRequests().add(activeUser);
 		usersService.updateUser(activeUser);
-		return "home";
+		return "redirect:/user/list";
 	}
 
 	@RequestMapping("/user/acceptFriendRequest/{id}")
@@ -107,7 +105,7 @@ public class UsersController {
 		User activeUser = usersService.getUserByEmail(email);
 		activeUser.acceptRequestFrom(friend);
 		usersService.saveUser(activeUser);
-		return "home";
+		return "redirect:/user/peticiones";
 	}
 
 	@RequestMapping("/user/peticiones")
@@ -116,7 +114,7 @@ public class UsersController {
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
 
-		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getRequests()));
+		Page<User> users = usersService.getRequestsByUser(activeUser.getId(), pageable);
 
 		model.addAttribute("peticiones", users.getContent());
 		model.addAttribute("page", users);
@@ -129,11 +127,16 @@ public class UsersController {
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
 
-		Page<User> users = new PageImpl<User>(new LinkedList<User>(activeUser.getFriends()));
+		Page<User> users = usersService.getFriendsByUser(activeUser.getId(), pageable);
 
 		model.addAttribute("amigos", users.getContent());
 		model.addAttribute("page", users);
 		return "user/amigos";
+	}
+
+	@RequestMapping("/publication/add")
+	public String getAmigos(Model model) {
+		return "/publication/add";
 	}
 
 }
