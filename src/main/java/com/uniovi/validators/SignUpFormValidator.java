@@ -1,14 +1,20 @@
 package com.uniovi.validators;
 
+import org.apache.commons.validator.EmailValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.uniovi.entities.User;
+import com.uniovi.services.UsersService;
 
 @Component
 public class SignUpFormValidator implements Validator {
+
+	@Autowired
+	private UsersService usersService;
 
 	@Override
 	public boolean supports(Class<?> aClass) {
@@ -20,9 +26,12 @@ public class SignUpFormValidator implements Validator {
 		User user = (User) target;
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Error.empty");
 
-//		if (!EmailValidator.getInstance().isValid(user.getEmail())) {
-//			errors.rejectValue("email", "Error.signup.email");
-//		}
+		if (!EmailValidator.getInstance().isValid(user.getEmail())) {
+			errors.rejectValue("email", "Error.signup.email");
+		}
+		if (usersService.getUserByEmail(user.getEmail()) != null) {
+			errors.rejectValue("email", "Error.signup.duplicate");
+		}
 
 		if (user.getName().length() < 5 || user.getName().length() > 24) {
 			errors.rejectValue("name", "Error.signup.name.length");
