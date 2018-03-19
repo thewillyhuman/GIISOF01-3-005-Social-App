@@ -80,22 +80,46 @@ public class UsersController {
 		} else {
 			users = usersService.getUsers(pageable);
 		}
+
 		model.addAttribute("userList", users.getContent());
 		model.addAttribute("page", users);
 
-		return "user/list";
-	}
-
-	@RequestMapping("/user/addFriendRequest/{id}")
-	public String addFriendRequest(Model model, @PathVariable Long id) {
-		User friend = usersService.getUser(id);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
+
+		model.addAttribute("activeUser", activeUser);
+		return "user/list";
+	}
+
+	@RequestMapping("/user/list/update")
+	public String updateList(Model model, Pageable pageable, @RequestParam Long id) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+
+		User friend = usersService.getUser(id);
 		friend.getRequests().add(activeUser);
 		usersService.updateUser(activeUser);
-		return "redirect:/user/list";
+
+		Page<User> users = usersService.getUsers(pageable);
+		model.addAttribute("userList", users.getContent());
+		model.addAttribute("activeUser", activeUser);
+		model.addAttribute("page", users);
+		return "user/list :: tableUsers";
 	}
+
+	// @RequestMapping(value = "/user/addFriendRequest/{id}")
+	// public String addFriendRequest(Model model, @PathVariable Long id) {
+	// User friend = usersService.getUser(id);
+	// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	// String email = auth.getName();
+	// User activeUser = usersService.getUserByEmail(email);
+	// friend.getRequests().add(activeUser);
+	// usersService.updateUser(activeUser);
+	// return "redirect:/user/list/update";
+	// }
 
 	@RequestMapping("/user/acceptFriendRequest/{id}")
 	public String acceptFriendRequest(Model model, @PathVariable Long id) {

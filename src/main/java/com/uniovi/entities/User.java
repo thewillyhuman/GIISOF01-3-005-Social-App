@@ -1,7 +1,6 @@
 package com.uniovi.entities;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,9 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Entity
@@ -131,7 +127,6 @@ public class User {
 	public Set<User> getRequests() {
 		if (requests == null)
 			requests = new HashSet<User>();
-
 		return requests;
 	}
 
@@ -154,6 +149,14 @@ public class User {
 		} else {
 			System.err.println("There's no request from that user");
 		}
+	}
+
+	public boolean hasRequest(User user) {
+		return requests.contains(user);
+	}
+	
+	public boolean isFriend(User user) {
+		return friends.contains(user);
 	}
 
 	@Override
