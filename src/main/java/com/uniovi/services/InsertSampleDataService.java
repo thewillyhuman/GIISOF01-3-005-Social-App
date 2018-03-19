@@ -35,7 +35,7 @@ public class InsertSampleDataService {
 		user8.setPassword("123123");
 		User user9 = new User("Álvaro", "p9@hotmail.com");
 		user9.setPassword("123123");
-		User user10 = new User("M.Khalifa", "p10@hotmail.com");
+		User user10 = new User("M Khalifa", "p10@hotmail.com");
 		user10.setPassword("123123");
 		User user11 = new User("Darth Vader", "p11@hotmail.com");
 		user11.setPassword("123	123");

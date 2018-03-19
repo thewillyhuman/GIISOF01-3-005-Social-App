@@ -1,6 +1,6 @@
 package com.uniovi.validators;
 
-import org.apache.commons.validator.EmailValidator;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -33,6 +33,11 @@ public class SignUpFormValidator implements Validator {
 			errors.rejectValue("email", "Error.signup.duplicate");
 		}
 
+		if (!user.getName().matches("[a-zA-Z ]*")) {
+			errors.rejectValue("name", "Error.signup.name.incorrect");
+		}
+		
+		
 		if (user.getName().length() < 5 || user.getName().length() > 24) {
 			errors.rejectValue("name", "Error.signup.name.length");
 		}
