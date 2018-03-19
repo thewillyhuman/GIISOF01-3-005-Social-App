@@ -1,7 +1,6 @@
 package com.uniovi.entities;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,9 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Entity
