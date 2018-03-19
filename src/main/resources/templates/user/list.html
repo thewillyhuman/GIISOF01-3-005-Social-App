@@ -3,11 +3,9 @@
 
 <head th:replace="fragments/head" />
 
-<nav th:replace="fragments/nav" />
-
-
 <body>
 
+<nav th:replace="fragments/nav" />
 	<form class="navbar-form" action="/user/list">
 		<div class="form-group">
 			<input name="searchText" type="text" class="form-control" size="50"
@@ -36,7 +34,7 @@
 					<td th:text="${user.name}">Usuario 1</td>
 					<td th:text="${user.email}">ejemplo@ejemplo.com</td>
 					<td><a th:href="${'/user/addFriendRequest/' + user.id }"
-						th:text="#{Button.add}"></a></td>
+						th:text="#{Button.add.friend}"></a></td>
 				</tr>
 			</tbody>
 		</table>
