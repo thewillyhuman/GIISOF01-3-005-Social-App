@@ -104,7 +104,7 @@ public class UsersController {
 		String email = auth.getName();
 		User activeUser = usersService.getUserByEmail(email);
 		activeUser.acceptRequestFrom(friend);
-		usersService.saveUser(activeUser);
+		usersService.updateUser(activeUser);
 		return "redirect:/user/peticiones";
 	}
 
