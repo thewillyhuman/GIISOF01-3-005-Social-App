@@ -6,12 +6,14 @@
 <body>
 
 	<nav th:replace="fragments/nav" />
+	
+	<div class="container">
+	
 	<div class="table-responsive">
 		<table class="table table-hover" th:fragment="tablePeticiones"
 			id="tablePeticiones">
 			<thead>
 				<tr>
-					<th class="col-md-1">Id</th>
 					<th th:text="#{list.name}"></th>
 					<th th:text="#{list.mail}"></th>
 					<th class="col-md-1"></th>
@@ -21,7 +23,6 @@
 			</thead>
 			<tbody>
 				<tr th:each="user : ${peticiones}">
-					<td th:text="${user.id}">1</td>
 					<td th:text="${user.name}">Usuario 1</td>
 					<td th:text="${user.email}">ejemplo@ejemplo.com</td>
 					<td><a th:href="${'/user/acceptFriendRequest/' + user.id }"
@@ -32,6 +33,8 @@
 	</div>
 
 	<footer th:replace="fragments/pagination" />
+	
+	</div>
 
 	<footer th:replace="fragments/footer" />
 
