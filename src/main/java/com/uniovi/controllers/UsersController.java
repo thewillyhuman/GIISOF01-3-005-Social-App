@@ -80,13 +80,33 @@ public class UsersController {
 		} else {
 			users = usersService.getUsers(pageable);
 		}
+
 		model.addAttribute("userList", users.getContent());
 		model.addAttribute("page", users);
 
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+
+		model.addAttribute("activeUser", activeUser);
 		return "user/list";
 	}
 
-	@RequestMapping("/user/addFriendRequest/{id}")
+	@RequestMapping("/user/list/update")
+	public String updateList(Model model, Pageable pageable) {
+		Page<User> users = usersService.getUsers(pageable);
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+
+		model.addAttribute("userList", users.getContent());
+		model.addAttribute("activeUser", activeUser);
+		model.addAttribute("page", users);
+		return "user/list :: tableUsers";
+	}
+
+	@RequestMapping(value = "/user/addFriendRequest/{id}", method = RequestMethod.POST)
 	public String addFriendRequest(Model model, @PathVariable Long id) {
 		User friend = usersService.getUser(id);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -94,7 +114,7 @@ public class UsersController {
 		User activeUser = usersService.getUserByEmail(email);
 		friend.getRequests().add(activeUser);
 		usersService.updateUser(activeUser);
-		return "redirect:/user/list";
+		return "redirect:/user/list/update";
 	}
 
 	@RequestMapping("/user/acceptFriendRequest/{id}")

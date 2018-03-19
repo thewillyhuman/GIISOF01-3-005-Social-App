@@ -131,7 +131,6 @@ public class User {
 	public Set<User> getRequests() {
 		if (requests == null)
 			requests = new HashSet<User>();
-
 		return requests;
 	}
 
@@ -154,6 +153,14 @@ public class User {
 		} else {
 			System.err.println("There's no request from that user");
 		}
+	}
+
+	public boolean hasRequest(User user) {
+		return requests.contains(user);
+	}
+	
+	public boolean isFriend(User user) {
+		return friends.contains(user);
 	}
 
 	@Override
